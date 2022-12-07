@@ -6,10 +6,9 @@ import challenge.alura.api.video.VideoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/videos")
@@ -22,5 +21,10 @@ public class VideoController {
     @Transactional
     public void cadastrar(@RequestBody @Valid DadosCadastroVideos dados){
         repository.save(new Video(dados));
+    }
+
+    @GetMapping
+    public List<Video> listarTodos(){
+        return repository.findAll();
     }
 }
