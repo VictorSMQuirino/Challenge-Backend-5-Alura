@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/videos")
@@ -48,5 +47,17 @@ public class VideoController {
     public void atualizar(@RequestBody @Valid DadosAtualizacaoVideo dados){
         var video = repository.getReferenceById(dados.id());
         video.atualizar(dados);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+        var video = repository.findById(id);
+
+        if(video.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        repository.delete(video.get());
     }
 }
