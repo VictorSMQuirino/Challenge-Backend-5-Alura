@@ -1,5 +1,6 @@
 package challenge.alura.api.controller;
 
+import challenge.alura.api.video.DadosAtualizacaoVideo;
 import challenge.alura.api.video.DadosCadastroVideos;
 import challenge.alura.api.video.Video;
 import challenge.alura.api.video.VideoRepository;
@@ -40,5 +41,12 @@ public class VideoController {
         }
 
         return video.get();
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosAtualizacaoVideo dados){
+        var video = repository.getReferenceById(dados.id());
+        video.atualizar(dados);
     }
 }
