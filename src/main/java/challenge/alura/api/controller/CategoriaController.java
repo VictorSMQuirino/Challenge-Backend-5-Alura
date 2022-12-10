@@ -49,4 +49,16 @@ public class CategoriaController {
         var categoria = repository.getReferenceById(dados.id());
         categoria.atualizar(dados);
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+        var categoria = repository.findById(id);
+
+        if(categoria.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        repository.delete(categoria.get());
+    }
 }
