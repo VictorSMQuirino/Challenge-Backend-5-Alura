@@ -1,6 +1,7 @@
 package challenge.alura.api.controller;
 
 import challenge.alura.api.categoria.CategoriaRepository;
+import challenge.alura.api.categoria.DadosAtualizacaoCategoria;
 import challenge.alura.api.categoria.DadosCadastroCategorias;
 import challenge.alura.api.categoria.Categoria;
 import jakarta.transaction.Transactional;
@@ -40,5 +41,12 @@ public class CategoriaController {
         }
 
         return categoria.get();
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosAtualizacaoCategoria dados){
+        var categoria = repository.getReferenceById(dados.id());
+        categoria.atualizar(dados);
     }
 }

@@ -22,4 +22,13 @@ public class Categoria {
         this.titulo = dados.titulo();
         this.cor = dados.cor();
     }
+
+    public void atualizar(DadosAtualizacaoCategoria dados) {
+        if(dados.titulo() != null){
+            this.titulo = dados.titulo();
+        }
+        if(dados.cor() != null){
+            this.cor = dados.cor();
+        }
+    }
 }
