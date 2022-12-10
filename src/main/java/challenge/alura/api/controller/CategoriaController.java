@@ -6,10 +6,9 @@ import challenge.alura.api.categoria.Categoria;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/categorias")
@@ -22,5 +21,10 @@ public class CategoriaController {
     @Transactional
     public void cadastrar(@RequestBody @Valid DadosCadastroCategorias dados){
         repository.save(new Categoria(dados));
+    }
+
+    @GetMapping
+    public List<Categoria> listarTodos(){
+        return repository.findAll();
     }
 }
