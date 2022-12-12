@@ -16,17 +16,26 @@ public class Video {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long categoriaId;
     private String titulo;
     private String descricao;
     private String url;
 
     public Video(DadosCadastroVideos dados) {
+        if(dados.categoriaId() == null){
+            this.categoriaId = 1L;
+        } else{
+            this.categoriaId = dados.categoriaId();
+        }
         this.titulo = dados.titulo();
         this.descricao = dados.descricao();
         this.url = dados.url();
     }
 
     public void atualizar(DadosAtualizacaoVideo dados){
+        if(dados.categoriaId() != null){
+            this.categoriaId = dados.categoriaId();
+        }
         if(dados.titulo() != null){
             this.titulo = dados.titulo();
         }

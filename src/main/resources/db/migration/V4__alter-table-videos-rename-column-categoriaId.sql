@@ -1,0 +1,1 @@
+alter table videos rename column categoriaId to categoria_id;
