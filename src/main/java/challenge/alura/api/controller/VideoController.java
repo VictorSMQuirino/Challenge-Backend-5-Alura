@@ -2,6 +2,7 @@ package challenge.alura.api.controller;
 
 import challenge.alura.api.video.DadosAtualizacaoVideo;
 import challenge.alura.api.video.DadosCadastroVideos;
+import challenge.alura.api.video.DadosDetalhamentoVideos;
 import challenge.alura.api.video.Video;
 import challenge.alura.api.video.VideoRepository;
 import jakarta.transaction.Transactional;
@@ -13,7 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -26,8 +27,13 @@ public class VideoController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroVideos dados){
-        repository.save(new Video(dados));
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroVideos dados, UriComponentsBuilder uriBuilder){
+        var video = new Video(dados);
+        repository.save(video);
+
+        var uri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoVideos(video));
     }
 
     @GetMapping
@@ -37,39 +43,26 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> buscarPorId(@PathVariable Long id){
-        var video = repository.findById(id);
+        var video = repository.getReferenceById(id);
 
-        if(video.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Video não encontrado.");
-        }
-
-       return ResponseEntity.status(HttpStatus.OK).body(video.get());
+       return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoVideos(video));
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity<Object> atualizar(@RequestBody @Valid DadosAtualizacaoVideo dados){
-        if(repository.findById(dados.id()).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Video não encontrado.");
-        }
-
         var video = repository.getReferenceById(dados.id());
         video.atualizar(dados);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Vídeo atualizado com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoVideos(video));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Object> excluir(@PathVariable Long id){
-        var video = repository.findById(id);
+        var video = repository.getReferenceById(id);
+        repository.delete(video);
 
-        if(video.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Video não encontrado");
-        }
-
-        repository.delete(video.get());
-
-        return ResponseEntity.status(HttpStatus.OK).body("Vídeo excluído com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoVideos(video));
     }
 }

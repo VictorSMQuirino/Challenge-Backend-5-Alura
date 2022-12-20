@@ -1,9 +1,6 @@
 package challenge.alura.api.controller;
 
-import challenge.alura.api.categoria.CategoriaRepository;
-import challenge.alura.api.categoria.DadosAtualizacaoCategoria;
-import challenge.alura.api.categoria.DadosCadastroCategorias;
-import challenge.alura.api.categoria.Categoria;
+import challenge.alura.api.categoria.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/categorias")
@@ -24,8 +22,13 @@ public class CategoriaController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroCategorias dados){
-        repository.save(new Categoria(dados));
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroCategorias dados, UriComponentsBuilder uriBuilder){
+        var categoria = new Categoria(dados);
+        repository.save(categoria);
+
+        var uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoCategorias(categoria));
     }
 
     @GetMapping
@@ -35,39 +38,26 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> buscarPorId(@PathVariable Long id){
-        var categoria = repository.findById(id);
+       var categoria = repository.getReferenceById(id);
 
-        if(categoria.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada.");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(categoria.get());
+       return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategorias(categoria));
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity<Object> atualizar(@RequestBody @Valid DadosAtualizacaoCategoria dados){
-        if(repository.findById(dados.id()).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada.");
-        }
-
         var categoria = repository.getReferenceById(dados.id());
         categoria.atualizar(dados);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Categoria atualizada com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategorias(categoria));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Object> excluir(@PathVariable Long id){
-        var categoria = repository.findById(id);
+        var categoria = repository.getReferenceById(id);
+        repository.delete(categoria);
 
-        if(categoria.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoria não encontrada");
-        }
-
-        repository.delete(categoria.get());
-        
-        return ResponseEntity.status(HttpStatus.OK).body("Categoria excluída com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategorias(categoria));
     }
 }

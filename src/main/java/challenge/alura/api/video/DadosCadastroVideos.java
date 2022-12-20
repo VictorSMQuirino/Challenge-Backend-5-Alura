@@ -9,6 +9,6 @@ public record DadosCadastroVideos(
         String titulo,
         @NotBlank
         String descricao,
-        @NotBlank @URL(protocol = "http")
+        @NotBlank @URL
         String url) {
 }
