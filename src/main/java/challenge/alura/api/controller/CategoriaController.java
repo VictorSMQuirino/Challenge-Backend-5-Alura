@@ -1,6 +1,8 @@
 package challenge.alura.api.controller;
 
 import challenge.alura.api.categoria.*;
+import challenge.alura.api.video.Video;
+import challenge.alura.api.video.VideoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -19,6 +20,9 @@ public class CategoriaController {
 
     @Autowired
     CategoriaRepository repository;
+
+    @Autowired
+    VideoRepository videoRepository;
 
     @PostMapping
     @Transactional
@@ -41,6 +45,17 @@ public class CategoriaController {
        var categoria = repository.getReferenceById(id);
 
        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoCategorias(categoria));
+    }
+
+    @GetMapping("/{id}/videos")
+    public ResponseEntity<Page<Video>> buscarVideosPorCategoria(@PathVariable Long id, @PageableDefault(page = 0, size = 10)Pageable pageable) {
+        var categoria = repository.findById(id);
+        if(categoria.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        var page = videoRepository.findAllByCategoriaId(categoria.get().getId(), pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @PutMapping
