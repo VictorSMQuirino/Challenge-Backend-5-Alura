@@ -48,6 +48,13 @@ public class VideoController {
        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoVideos(video));
     }
 
+    @GetMapping("/busca-nome")
+    public ResponseEntity<Object> buscarPorTitulo(@RequestParam(name = "search") String busca, @PageableDefault(page = 0, size = 10)Pageable pageable){
+        var videos = repository.findAllByTituloContaining(busca, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(videos);
+    }
+
     @PutMapping
     @Transactional
     public ResponseEntity<Object> atualizar(@RequestBody @Valid DadosAtualizacaoVideo dados){
