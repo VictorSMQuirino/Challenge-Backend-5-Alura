@@ -35,7 +35,12 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Video>> listarTodos(@PageableDefault(page = 0, size = 10) Pageable pageable){
+    public ResponseEntity<Page<Video>> listarTodos(@RequestParam(name = "search", required = false) String busca, @PageableDefault(page = 0, size = 10) Pageable pageable){
+        if(busca != null){
+            var videos = repository.findAllByTituloContaining(busca, pageable);
+
+            return ResponseEntity.status(HttpStatus.OK).body(videos);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(repository.findAll(pageable));
     }
 
@@ -44,13 +49,6 @@ public class VideoController {
         var video = repository.getReferenceById(id);
 
        return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoVideos(video));
-    }
-
-    @GetMapping("/busca-nome")
-    public ResponseEntity<Object> buscarPorTitulo(@RequestParam(name = "search") String busca, @PageableDefault(page = 0, size = 10)Pageable pageable){
-        var videos = repository.findAllByTituloContaining(busca, pageable);
-
-        return ResponseEntity.status(HttpStatus.OK).body(videos);
     }
 
     @PutMapping
