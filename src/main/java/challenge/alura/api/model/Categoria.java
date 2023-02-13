@@ -1,5 +1,7 @@
-package challenge.alura.api.categoria;
+package challenge.alura.api.model;
 
+import challenge.alura.api.dto.DadosAtualizacaoCategoria;
+import challenge.alura.api.dto.DadosCadastroCategorias;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

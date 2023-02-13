@@ -1,5 +1,7 @@
-package challenge.alura.api.video;
+package challenge.alura.api.model;
 
+import challenge.alura.api.dto.DadosAtualizacaoVideo;
+import challenge.alura.api.dto.DadosCadastroVideos;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

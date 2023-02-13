@@ -1,4 +1,4 @@
-package challenge.alura.api.video;
+package challenge.alura.api.dto;
 
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;

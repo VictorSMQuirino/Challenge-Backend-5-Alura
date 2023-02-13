@@ -1,4 +1,6 @@
-package challenge.alura.api.categoria;
+package challenge.alura.api.dto;
+
+import challenge.alura.api.model.Categoria;
 
 public record DadosDetalhamentoCategorias(Long id, String titulo, String cor) {
 

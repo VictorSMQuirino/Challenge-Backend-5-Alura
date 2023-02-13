@@ -1,8 +1,12 @@
 package challenge.alura.api.controller;
 
-import challenge.alura.api.categoria.*;
-import challenge.alura.api.video.Video;
-import challenge.alura.api.video.VideoRepository;
+import challenge.alura.api.dto.DadosAtualizacaoCategoria;
+import challenge.alura.api.dto.DadosCadastroCategorias;
+import challenge.alura.api.dto.DadosDetalhamentoCategorias;
+import challenge.alura.api.model.Categoria;
+import challenge.alura.api.model.Video;
+import challenge.alura.api.repository.CategoriaRepository;
+import challenge.alura.api.repository.VideoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

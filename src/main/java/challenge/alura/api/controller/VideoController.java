@@ -1,10 +1,10 @@
 package challenge.alura.api.controller;
 
-import challenge.alura.api.video.DadosAtualizacaoVideo;
-import challenge.alura.api.video.DadosCadastroVideos;
-import challenge.alura.api.video.DadosDetalhamentoVideos;
-import challenge.alura.api.video.Video;
-import challenge.alura.api.video.VideoRepository;
+import challenge.alura.api.dto.DadosAtualizacaoVideo;
+import challenge.alura.api.dto.DadosCadastroVideos;
+import challenge.alura.api.dto.DadosDetalhamentoVideos;
+import challenge.alura.api.model.Video;
+import challenge.alura.api.repository.VideoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/videos")

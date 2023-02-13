@@ -1,4 +1,4 @@
-package challenge.alura.api.categoria;
+package challenge.alura.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

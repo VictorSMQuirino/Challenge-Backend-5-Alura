@@ -1,4 +1,6 @@
-package challenge.alura.api.video;
+package challenge.alura.api.dto;
+
+import challenge.alura.api.model.Video;
 
 public record DadosDetalhamentoVideos(Long id, Long categoriaId, String titulo, String descricao, String url) {
 
